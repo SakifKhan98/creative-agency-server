@@ -106,4 +106,4 @@ app.get("/", (req, res) => {
   res.send("This Epic Shit is Really Working!");
 });
 
-app.listen(port);
+app.listen(process.env.PORT || port);
