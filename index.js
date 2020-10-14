@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
+const fs = require("fs-extra");
 require("dotenv").config();
 const MongoClient = require("mongodb").MongoClient;
 
@@ -9,7 +10,7 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use(cors());
-app.use(express.static("orders"));
+app.use(express.static("services"));
 app.use(fileUpload());
 
 const port = 5000;
@@ -27,10 +28,26 @@ client.connect((err) => {
   const adminsCollection = client.db("creativeAgency").collection("admins");
 
   app.post("/addService", (req, res) => {
-    const service = req.body;
-    servicesCollection.insertOne(service).then((result) => {
-      res.send(result.insertedCount > 0);
-    });
+    const file = req.files.file;
+    const name = req.body.name;
+    const description = req.body.description;
+    const newImg = file.data;
+    const encImg = newImg.toString("base64");
+
+    var image = {
+      contentType: file.mimetype,
+      size: file.size,
+      img: Buffer.from(encImg, "base64"),
+    };
+
+    servicesCollection
+      .insertOne({ name, description, image })
+      .then((result) => {
+        res.send(result.insertedCount > 0);
+      });
+    // servicesCollection.insertOne(service).then((result) => {
+    //   res.send(result.insertedCount > 0);
+    // });
   });
 
   app.post("/addReview", (req, res) => {
