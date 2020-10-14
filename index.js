@@ -45,9 +45,6 @@ client.connect((err) => {
       .then((result) => {
         res.send(result.insertedCount > 0);
       });
-    // servicesCollection.insertOne(service).then((result) => {
-    //   res.send(result.insertedCount > 0);
-    // });
   });
 
   app.post("/addReview", (req, res) => {
