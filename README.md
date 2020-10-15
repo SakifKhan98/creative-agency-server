@@ -1,2 +1,2 @@
 # creative-agency-server
-##This is the servier side code for creative-agency.
+##This is the server side code for creative-agency.
